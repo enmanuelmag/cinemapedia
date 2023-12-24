@@ -14,6 +14,8 @@ class MovieDBDataSource extends MoviesDataSource {
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
+    print(Environment.movieDbKey);
+    print(Environment.baseUrl);
     final response = await dio.get('/movie/now_playing', queryParameters: {
       'page': page,
     });
