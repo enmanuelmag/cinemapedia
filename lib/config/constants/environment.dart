@@ -6,4 +6,7 @@ class Environment {
 
   static final String baseUrl = dotenv.get('BASE_URL',
       fallback: 'No base url found, please check your .env file');
+
+  static final String imageUrl = dotenv.get('IMAGE_URL',
+      fallback: 'No image url found, please check your .env file');
 }

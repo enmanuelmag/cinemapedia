@@ -1,7 +1,7 @@
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 
-abstract class MovieRepository {
+abstract class MoviesRepository {
   late final MoviesDataSource dataSource;
 
   Future<List<Movie>> getPopular({int page = 1});
