@@ -6,7 +6,7 @@ import 'package:cinemapedia/presentation/providers/providers.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-  static const String routeName = '/home';
+  static const String routeName = '/';
 
   @override
   Widget build(BuildContext context) {
