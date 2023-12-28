@@ -9,4 +9,6 @@ class Environment {
 
   static final String imageUrl = dotenv.get('IMAGE_URL',
       fallback: 'No image url found, please check your .env file');
+
+  static const String noMovieId = 'no-movie-id';
 }
