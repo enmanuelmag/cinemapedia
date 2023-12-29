@@ -19,7 +19,7 @@ class MovieMapper {
         genreIds: movieDB.genreIds.map((e) => e.toString()).toList(),
         backdropPath: movieDB.backdropPath != ''
             ? '${Environment.imageUrl}/${movieDB.backdropPath}'
-            : 'https://sd.keepcalms.com/i—w600/keep—calm-poster—not—found.jpg',
+            : 'https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/3273/758758/29796-1024__56014.1670458178.jpg?c=2?imbypass=on',
         posterPath: movieDB.posterPath != ''
             ? '${Environment.imageUrl}/${movieDB.posterPath}'
             : 'no-poster',
@@ -40,9 +40,9 @@ class MovieMapper {
         genreIds: movieDetails.genres.map((e) => e.name.toString()).toList(),
         backdropPath: movieDetails.backdropPath != ''
             ? '${Environment.imageUrl}/${movieDetails.backdropPath}'
-            : 'https://sd.keepcalms.com/i—w600/keep—calm-poster—not—found.jpg',
+            : 'https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/3273/758758/29796-1024__56014.1670458178.jpg?c=2?imbypass=on',
         posterPath: movieDetails.posterPath != ''
             ? '${Environment.imageUrl}/${movieDetails.posterPath}'
-            : 'https://sd.keepcalms.com/i—w600/keep—calm-poster—not—found.jpg',
+            : 'https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/3273/758758/29796-1024__56014.1670458178.jpg?c=2?imbypass=on',
       );
 }

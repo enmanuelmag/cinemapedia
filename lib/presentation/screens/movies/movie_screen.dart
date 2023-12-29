@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +21,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() {
     super.initState();
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -60,9 +62,7 @@ class _MovieDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textStyles = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.all(5),
         child: Row(
@@ -109,8 +109,62 @@ class _MovieDetails extends StatelessWidget {
               .toList(),
         ),
       ),
-      const SizedBox(height: 100),
+      _ActorsByMovie(movieId: movie.id.toString()),
+      const SizedBox(height: 25),
     ]);
+  }
+}
+
+class _ActorsByMovie extends ConsumerWidget {
+  final String movieId;
+  const _ActorsByMovie({required this.movieId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final actors = ref.watch(actorsProvider)[movieId];
+
+    if (actors == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        itemCount: actors.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final actor = actors[index];
+          return FadeInRight(
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              width: 135,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Image.network(
+                      actor.profilePath,
+                      width: 135,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    actor.name,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -127,19 +181,28 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
       flexibleSpace: FlexibleSpaceBar(
-        centerTitle: false,
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        title: Text(
-          movie.title,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
+        // centerTitle: false,
+        // titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        // title: Text(
+        //   movie.title,
+        //   style: const TextStyle(
+        //     fontSize: 20,
+        //   ),
+        // ),
         background: Stack(children: [
           SizedBox.expand(
             child: Image.network(
               movie.posterPath,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress != null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return FadeInRight(
+                    duration: const Duration(milliseconds: 225), child: child);
+              },
             ),
           ),
           const SizedBox.expand(
