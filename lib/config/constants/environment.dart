@@ -11,4 +11,6 @@ class Environment {
       fallback: 'No image url found, please check your .env file');
 
   static const String noMovieId = 'no-movie-id';
+
+  static const String noActorId = 'no-actor-id';
 }
