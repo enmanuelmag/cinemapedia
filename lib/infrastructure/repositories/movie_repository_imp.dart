@@ -3,7 +3,6 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/domain/repositories/movies_repository.dart';
 
 class MovieRepositoryImp extends MoviesRepository {
-
   MovieRepositoryImp(MoviesDataSource dataSource) {
     this.dataSource = dataSource;
   }
@@ -26,4 +25,8 @@ class MovieRepositoryImp extends MoviesRepository {
 
   @override
   Future<Movie> getMovieById(String id) async => dataSource.getMovieById(id);
+
+  @override
+  Future<List<Movie>> searchMovies(String query) async =>
+      dataSource.searchMovies(query);
 }

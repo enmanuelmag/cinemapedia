@@ -62,6 +62,14 @@ class MovieDBDataSource extends MoviesDataSource {
       throw Exception('Movie with id $id not found');
     }
 
-    return MovieMapper.movieDetailsToEntity(MovieDetails.fromJson(response.data));
+    return MovieMapper.movieDetailsToEntity(
+        MovieDetails.fromJson(response.data));
+  }
+
+  Future<List<Movie>> searchMovies(String query) async {
+    final response = await dio.get('/search/movie', queryParameters: {
+      'query': query,
+    });
+    return _jsonToMovies(response.data);
   }
 }
