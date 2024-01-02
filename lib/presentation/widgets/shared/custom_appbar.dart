@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cinemapedia/presentation/delegates/search_movie_delegate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/presentation/screens/screen.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
+import 'package:cinemapedia/presentation/delegates/search_movie_delegate.dart';
 
 class CustomAppBar extends ConsumerWidget {
   const CustomAppBar({super.key});
@@ -27,13 +31,24 @@ class CustomAppBar extends ConsumerWidget {
                   const Spacer(),
                   IconButton(
                       onPressed: () {
-                        final movieRepository =
-                            ref.read(movieRepositoryProvider);
+                        final searchMoviesNotifier =
+                            ref.read(searchMoviesProvider.notifier);
+                        final searchMovies = ref.read(searchMoviesProvider);
+                        final searchQuery = ref.read(searchQueryProvider.notifier);
 
-                        showSearch(
-                            context: context,
-                            delegate: SearchMovieDelegate(
-                                searchMovies: movieRepository.searchMovies));
+                        showSearch<Movie?>(
+                                query: searchQuery.state,
+                                context: context,
+                                delegate: SearchMovieDelegate(
+                                    initialMovies: searchMovies,
+                                    searchMovies: searchMoviesNotifier.searchMoviesByQuery))
+                            .then((movie) => {
+                                  if (movie != null)
+                                    {
+                                      context.push(
+                                          '/${MovieScreen.routeName}/${movie.id}}')
+                                    }
+                                });
                       },
                       icon: const Icon(Icons.search)),
                 ],
