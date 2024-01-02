@@ -25,7 +25,7 @@ class MovieMovieDB {
   final String overview;
   final double popularity;
   final String posterPath;
-  final DateTime releaseDate;
+  final DateTime? releaseDate;
   final String title;
   final bool video;
   final double voteAverage;
@@ -44,7 +44,9 @@ class MovieMovieDB {
         popularity: json["popularity"]?.toDouble(),
         originalLanguage: json["original_language"],
         voteAverage: json["vote_average"]?.toDouble(),
-        releaseDate: DateTime.parse(json["release_date"]),
+        releaseDate: (json["release_date"] as String).isNotEmpty
+            ? DateTime.parse(json["release_date"])
+            : null,
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
       );
 
@@ -62,7 +64,8 @@ class MovieMovieDB {
         "original_title": originalTitle,
         "original_language": originalLanguage,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
-        "release_date":
-            "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "release_date": releaseDate == null
+            ? "No release date found"
+            : "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
       };
 }
