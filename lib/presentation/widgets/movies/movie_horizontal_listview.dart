@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/presentation/screens/screen.dart';
+import 'package:cinemapedia/presentation/views/views.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/domain/entities/movie.dart';
@@ -76,27 +77,31 @@ class _Slide extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-              width: 150,
-              child: GestureDetector(
-                  onTap: () {},
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        movie.posterPath,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return GestureDetector(
-                              child: FadeIn(child: child),
-                              onTap: () => context
-                                  .push('/${MovieScreen.routeName}/${movie.id}'),
-                            );
-                          }
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        },
-                      )))),
+            width: 150,
+            child: GestureDetector(
+              onTap: () {},
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  movie.posterPath,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return GestureDetector(
+                        child: FadeIn(child: child),
+                        onTap: () => context.push(
+                          '${HomeView.routeName}/${MovieScreen.routeName}/${movie.id}',
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
           const SizedBox(height: 5),
           SizedBox(
             width: 150,
@@ -159,11 +164,12 @@ class _Title extends StatelessWidget {
           const Spacer(),
           if (subtitle != null)
             FilledButton.tonal(
-                style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                onPressed: () {},
-                child: Text(
-                  subtitle!,
-                ))
+              style: const ButtonStyle(visualDensity: VisualDensity.compact),
+              onPressed: () {},
+              child: Text(
+                subtitle!,
+              ),
+            )
         ],
       ),
     );
