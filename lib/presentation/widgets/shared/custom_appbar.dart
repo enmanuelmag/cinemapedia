@@ -1,3 +1,4 @@
+import 'package:cinemapedia/presentation/views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,19 +35,21 @@ class CustomAppBar extends ConsumerWidget {
                         final searchMoviesNotifier =
                             ref.read(searchMoviesProvider.notifier);
                         final searchMovies = ref.read(searchMoviesProvider);
-                        final searchQuery = ref.read(searchQueryProvider.notifier);
+                        final searchQuery =
+                            ref.read(searchQueryProvider.notifier);
 
                         showSearch<Movie?>(
                                 query: searchQuery.state,
                                 context: context,
                                 delegate: SearchMovieDelegate(
                                     initialMovies: searchMovies,
-                                    searchMovies: searchMoviesNotifier.searchMoviesByQuery))
+                                    searchMovies: searchMoviesNotifier
+                                        .searchMoviesByQuery))
                             .then((movie) => {
                                   if (movie != null)
                                     {
                                       context.push(
-                                          '/${MovieScreen.routeName}/${movie.id}}')
+                                          '${HomeView.routeName}/${MovieScreen.routeName}/${movie.id}}')
                                     }
                                 });
                       },

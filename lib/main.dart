@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      title: 'Cinemapedia',
       routerConfig: appRouter,
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: AppTheme.themeData,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
