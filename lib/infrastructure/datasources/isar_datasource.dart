@@ -31,7 +31,7 @@ class IsarDataSource extends LocalStorageDatasource {
   }
 
   @override
-  Future<List<Movie>> loadMovies({int limit = 10, int offset = 1}) async {
+  Future<List<Movie>> loadMovies({int limit = 20, int offset = 1}) async {
     final isar = await _db;
 
     final movies =
