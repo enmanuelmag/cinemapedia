@@ -168,72 +168,116 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar(this.movie);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     return SliverAppBar(
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await ref
+                .read(favoriteMoviesProvider.notifier)
+                .toggleFavorite(movie);
+            ref.invalidate(isFavoriteProvider(movie.id));
+          },
+          icon: isFavoriteFuture.when(
+            skipError: true,
+            loading: () => const Icon(Icons.favorite_border),
+            error: (__, _) => const Icon(Icons.favorite_border),
+            data: (isFavorite) => isFavorite
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_border),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () {
+            //deep link
+            //print('share');
+          },
+        ),
+      ],
+      foregroundColor: Colors.white,
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
-      foregroundColor: Colors.white,
       flexibleSpace: FlexibleSpaceBar(
-        // centerTitle: false,
-        // titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        // title: Text(
-        //   movie.title,
-        //   style: const TextStyle(
-        //     fontSize: 20,
-        //   ),
-        // ),
-        background: Stack(children: [
-          SizedBox.expand(
-            child: Image.network(
-              movie.posterPath,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress != null) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+        background: Stack(
+          children: [
+            SizedBox.expand(
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return FadeInRight(
+                    duration: const Duration(milliseconds: 225),
+                    child: child,
                   );
-                }
-                return FadeInRight(
-                    duration: const Duration(milliseconds: 225), child: child);
-              },
+                },
+              ),
             ),
+            const _CustomGradient(
+              stops: [0.8, 1.0],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black54,
+              ],
+            ),
+            const _CustomGradient(
+              stops: [0.7, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black87,
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  final List<Color> colors;
+  final List<double> stops;
+  final AlignmentGeometry end;
+  final AlignmentGeometry begin;
+
+  const _CustomGradient({
+    required this.colors,
+    required this.stops,
+    this.end = Alignment.topCenter,
+    this.begin = Alignment.bottomCenter,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            stops: stops,
+            begin: begin,
+            end: end,
+            colors: colors,
           ),
-          const SizedBox.expand(
-              child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                stops: [0.7, 1.0],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black87,
-                ],
-              ),
-            ),
-          )),
-          const SizedBox.expand(
-              child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                stops: [0.8, 1.0],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black87,
-                ],
-              ),
-            ),
-          ))
-        ]),
+        ),
       ),
     );
   }
